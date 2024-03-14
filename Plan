@@ -1,0 +1,127 @@
+Project Steps:
+
+1) Determine the appointment hours for each day 
+
+(MAYBE ITS BETTER TO USE A JSON FILE FOR THE DATA)
+(CHECK IT LATER)
+
+
+2) Get current date (number) --> +1 to get the next day
+SOS! if day == friday --> +3 (go to monday) 
+Save it in a variable $DATE
+
+3) Check what day (word) it is, so you can use the correct variable
+
+- switch statement
+- save the appointment hour of that day in another variable $TIME
+
+=========================================================
+
+4) Get the available hours from the website for the next day (use the DATE variable)
+It's in a string format, maybe you need a function to turn it into an integer
+
+5) Check what's the closest hour available to the HOUR variable
+
+6) Close the appointment to the website
+
+7) Send me email that the appointment has been closed and at what time
+
+
+======================================================================================
+
+Get the html code from the json, then parse the html to get the available times, and then output them as a list
+
+curl -v 'https://gym.auth.gr/wp-admin/admin-ajax.php?lang=el' \
+  -H 'Accept: application/json, text/javascript, */*; q=0.01' \
+  -H 'Accept-Language: el-GR,el;q=0.9,en;q=0.8' \
+  -H 'Connection: keep-alive' \
+  -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \
+  -H 'Cookie: wordpress_sec_57ff5dc461396340fc743e620f2562cc=itsaousis%7C1700171011%7CmwMYqRJQDfxxjtWjvoBFZVVp53tLbRP0KFfws1XSeR7%7C3fee567439e13e46c751285cc4007f21a0ae2cf7424787725949a52051e77d6f; wordpress_test_cookie=WP+Cookie+check; hubspotutk=65c58b9d8c6d0d7eaf843adc2502537c; __hssrc=1; _ga_YLQHF8E7PV=GS1.1.1682356554.3.1.1682356555.0.0.0; _ga_NQD1199Y92=GS1.1.1684953542.1.0.1684953543.0.0.0; _ga_Y4SV3BWKZ6=GS1.1.1685996688.97.1.1685997333.0.0.0; _wpfuuid=8ae69f0e-7e7b-4d4d-8e34-a3328dfcfee2; wordpress_logged_in_57ff5dc461396340fc743e620f2562cc=itsaousis%7C1700171011%7CmwMYqRJQDfxxjtWjvoBFZVVp53tLbRP0KFfws1XSeR7%7Cbef925bdee8f4cfc4903fce3a5644a4c1140f5e4e08a2fe40b43fd0035e8dbf3; _ga_83M7NCTXJ1=GS1.1.1700908295.1.0.1700908304.51.0.0; _ga_ECXVM1C4ZK=GS1.1.1701213457.1.1.1701213478.0.0.0; PHPSESSID=4usm7t5k2q9k75vgnnkt158a6j; __hstc=162516579.65c58b9d8c6d0d7eaf843adc2502537c.1676894874440.1699229272272.1706627752108.9; pll_language=el; _ga_SXFDC4PELE=GS1.2.1708855172.1.0.1708855172.0.0.0; _ga=GA1.1.379751781.1674313189; _ga_ECP0G45VGB=GS1.1.1709241642.12.1.1709241646.0.0.0' \
+  -H 'Origin: https://gym.auth.gr' \
+  -H 'Referer: https://gym.auth.gr/reservations/' \
+  -H 'Sec-Fetch-Dest: empty' \
+  -H 'Sec-Fetch-Mode: cors' \
+  -H 'Sec-Fetch-Site: same-origin' \
+  -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36' \
+  -H 'X-Requested-With: XMLHttpRequest' \
+  -H 'sec-ch-ua: "Chromiu< Set-Cookie: PHPSESSID=plkjl4cl9l6bq94l3kiiu4bqc7; path=/
+< Set-Cookie: pll_language=el; expires=Thu, 13-Mar-2025 12:35:47 GMT; Max-Age=31536000; path=/; secure; SameSite=Lax
+m";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "Linux"' \
+  --data-raw 'sln%5Bdate%5D=2024-03-14&sln%5Btime%5D=18%3A00&sln%5Bservices%5D%5B11192%5D=1&sln%5Bcustomer_timezone%5D=Europe%2FAthens&sln_step_page=services&submit_services=next&action=salon&method=salonStep&security=aad3114df0' | jq -r '.content' | grep -oP '(?<={)[^}]*(?=})' | sed 's/&quot;/"/g' | grep -oP '"times":{\K[^}]+' | awk -F '[:,]' '{ for(i=1; i<=NF; i+=2) print $i ":" $(i+1) }' | sort -u
+
+
+
+
+
+curl 'https://gym.auth.gr/wp-admin/admin-ajax.php?lang=el' \
+  -H 'Accept: application/json, text/javascript, */*; q=0.01' \
+  -H 'Accept-Language: el-GR,el;q=0.9,en;q=0.8' \
+  -H 'Connection: keep-alive' \
+  -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \
+  -H 'Cookie: wordpress_sec_57ff5dc461396340fc743e620f2562cc=itsaousis%7C1700171011%7CmwMYqRJQDfxxjtWjvoBFZVVp53tLbRP0KFfws1XSeR7%7C3fee567439e13e46c751285cc4007f21a0ae2cf7424787725949a52051e77d6f; wordpress_test_cookie=WP+Cookie+check; hubspotutk=65c58b9d8c6d0d7eaf843adc2502537c; __hssrc=1; _ga_YLQHF8E7PV=GS1.1.1682356554.3.1.1682356555.0.0.0; _ga_NQD1199Y92=GS1.1.1684953542.1.0.1684953543.0.0.0; _ga_Y4SV3BWKZ6=GS1.1.1685996688.97.1.1685997333.0.0.0; _wpfuuid=8ae69f0e-7e7b-4d4d-8e34-a3328dfcfee2; wordpress_logged_in_57ff5dc461396340fc743e620f2562cc=itsaousis%7C1700171011%7CmwMYqRJQDfxxjtWjvoBFZVVp53tLbRP0KFfws1XSeR7%7Cbef925bdee8f4cfc4903fce3a5644a4c1140f5e4e08a2fe40b43fd0035e8dbf3; _ga_83M7NCTXJ1=GS1.1.1700908295.1.0.1700908304.51.0.0; _ga_ECXVM1C4ZK=GS1.1.1701213457.1.1.1701213478.0.0.0; PHPSESSID=4usm7t5k2q9k75vgnnkt158a6j; __hstc=162516579.65c58b9d8c6d0d7eaf843adc2502537c.1676894874440.1699229272272.1706627752108.9; pll_language=el; _ga_SXFDC4PELE=GS1.2.1708855172.1.0.1708855172.0.0.0; _ga=GA1.1.379751781.1674313189; _ga_ECP0G45VGB=GS1.1.1709241642.12.1.1709241646.0.0.0' \
+  -H 'Origin: https://gym.auth.gr' \
+  -H 'Referer: https://gym.auth.gr/reservations/' \
+  -H 'Sec-Fetch-Dest: empty' \
+  -H 'Sec-Fetch-Mode: cors' \
+  -H 'Sec-Fetch-Site: same-origin' \
+  -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36' \
+  -H 'X-Requested-With: XMLHttpRequest' \
+  -H 'sec-ch-ua: "Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "Linux"' \
+  --data-raw 'sln%5Bdate%5D=2024-03-14&sln%5Btime%5D=14%3A30&sln%5Bservices%5D%5B11192%5D=1&sln%5Bcustomer_timezone%5D=Europe%2FAthens&sln_step_page=services&submit_services=next&action=salon&method=salonStep&security=33dc6384bd' | jq -r '.content' | grep -oP '(?<={)[^}]*(?=})' | sed 's/&quot;/"/g' | grep -oP '"times":{\K[^}]+' | awk -F '[:,]' '{ for(i=1; i<=NF; i+=2) print $i ":" $(i+1) }' | sort -u
+  
+  
+  
+  
+  =============================================================
+  
+  Curl command when you chose the hour
+  curl 'https://gym.auth.gr/wp-admin/admin-ajax.php?lang=el' \
+  -H 'Accept: application/json, text/javascript, */*; q=0.01' \
+  -H 'Accept-Language: en-US,en;q=0.9' \
+  -H 'Connection: keep-alive' \
+  -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \
+  -H 'Cookie: PHPSESSID=pb9s0da43cn7ig623cg1s1kc8e; pll_language=el' \
+  -H 'Origin: https://gym.auth.gr' \
+  -H 'Referer: https://gym.auth.gr/reservations/' \
+  -H 'Sec-Fetch-Dest: empty' \
+  -H 'Sec-Fetch-Mode: cors' \
+  -H 'Sec-Fetch-Site: same-origin' \
+  -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36' \
+  -H 'X-Requested-With: XMLHttpRequest' \
+  -H 'sec-ch-ua: "Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "Linux"' \
+  --data-raw 'sln%5Bdate%5D=14%2F03%2F2024&sln%5Btime%5D=21%3A30&sln%5Bcustomer_timezone%5D=Europe%2FAthens&sln_step_page=date&submit_date=next&action=salon&method=salonStep&security=281c67aa42'
+  
+  
+  =======================================================================
+  
+
+ having submited your information
+  
+  curl 'https://gym.auth.gr/wp-admin/admin-ajax.php?lang=el' \
+  -H 'Accept: application/json, text/javascript, */*; q=0.01' \
+  -H 'Accept-Language: en-US,en;q=0.9' \
+  -H 'Connection: keep-alive' \
+  -H 'Content-Type: multipart/form-data; boundary=----WebKitFormBoundarydFfCegzWzpbNySZ8' \
+  -H 'Cookie: PHPSESSID=pb9s0da43cn7ig623cg1s1kc8e; pll_language=el' \
+  -H 'Origin: https://gym.auth.gr' \
+  -H 'Referer: https://gym.auth.gr/reservations/' \
+  -H 'Sec-Fetch-Dest: empty' \
+  -H 'Sec-Fetch-Mode: cors' \
+  -H 'Sec-Fetch-Site: same-origin' \
+  -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36' \
+  -H 'X-Requested-With: XMLHttpRequest' \
+  -H 'sec-ch-ua: "Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "Linux"' \
+  --data-raw $'------WebKitFormBoundarydFfCegzWzpbNySZ8\r\nContent-Disposition: form-data; name="sln[no_user_account]"\r\n\r\n1\r\n------WebKitFormBoundarydFfCegzWzpbNySZ8\r\nContent-Disposition: form-data; name="sln[firstname]"\r\n\r\nιασονας\r\n------WebKitFormBoundarydFfCegzWzpbNySZ8\r\nContent-Disposition: form-data; name="sln[lastname]"\r\n\r\nτσαουσης\r\n------WebKitFormBoundarydFfCegzWzpbNySZ8\r\nContent-Disposition: form-data; name="sln[email]"\r\n\r\niasonas@tsaousis.gr\r\n------WebKitFormBoundarydFfCegzWzpbNySZ8\r\nContent-Disposition: form-data; name="sln[phone]"\r\n\r\n6946221298\r\n------WebKitFormBoundarydFfCegzWzpbNySZ8\r\nContent-Disposition: form-data; name="sln[address]"\r\n\r\nΑμοργου 23\r\n------WebKitFormBoundarydFfCegzWzpbNySZ8\r\nContent-Disposition: form-data; name="sln_step_page"\r\n\r\ndetails\r\n------WebKitFormBoundarydFfCegzWzpbNySZ8\r\nContent-Disposition: form-data; name="submit_details"\r\n\r\nnext\r\n------WebKitFormBoundarydFfCegzWzpbNySZ8\r\nContent-Disposition: form-data; name="action"\r\n\r\nsalon\r\n------WebKitFormBoundarydFfCegzWzpbNySZ8\r\nContent-Disposition: form-data; name="method"\r\n\r\nsalonStep\r\n------WebKitFormBoundarydFfCegzWzpbNySZ8\r\nContent-Disposition: form-data; name="security"\r\n\r\n281c67aa42\r\n------WebKitFormBoundarydFfCegzWzpbNySZ8--\r\n'
+
+
+=============================================================================
+
+
