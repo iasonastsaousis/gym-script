@@ -83,9 +83,13 @@ TIMES_SET=$(curl -s 'https://gym.auth.gr/wp-admin/admin-ajax.php?lang=el' \
   --data-raw "sln%5Bdate%5D=2024-03-$DATE&sln%5Btime%5D=$(date +%H)%3A00&sln%5Bservices%5D%5B11192%5D=1&sln%5Bcustomer_timezone%5D=Europe%2FAthens&sln_step_page=services&submit_services=next&action=salon&method=salonStep&security=$SECURITY_CODE" | jq -r '.content' | grep -oP '(?<={)[^}]*(?=})' | sed 's/&quot;/"/g' | grep -oP '"times":{\K[^}]+' | awk -F '[:,]' '{ for(i=1; i<=NF; i+=2) print $i ":" $(i+1) }' | sort -u)
 
 
+
+
 echo $TIME
 #echo $DATE
 #echo $day
 #echo $COOKIE
 #echo $security_code
-printf "%s\n" "$TIMES_SET"
+echo "$TIMES_SET"
+
+
